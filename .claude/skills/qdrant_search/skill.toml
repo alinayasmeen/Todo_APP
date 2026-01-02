@@ -1,0 +1,4 @@
+name = "qdrant_search"
+description = "Provides vector store operations, search, upsert, and collection management using Qdrant."
+version = "1.0.0"
+entrypoint = "skill.md"

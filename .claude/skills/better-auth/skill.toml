@@ -1,0 +1,14 @@
+[skill]
+id = "better-auth"
+version = "1.0.0"
+name = "Better Auth"
+description = "Guides implementing secure authentication and authorization for applications."
+
+[function]
+name = "use_better_auth"
+description = "Provides guidance on implementing secure authentication and authorization for applications."
+parameters = { }
+
+[manifest]
+version = "v1"
+entrypoint = "skill.md"

@@ -1,0 +1,14 @@
+[skill]
+id = "clean-coding-debugging"
+version = "1.0.0"
+name = "Clean Coding & Debugging"
+description = "Guides writing maintainable code and systematically debugging issues in applications."
+
+[function]
+name = "use_clean_coding_debugging"
+description = "Provides guidance on writing maintainable code and systematically debugging issues in applications."
+parameters = { }
+
+[manifest]
+version = "v1"
+entrypoint = "skill.md"

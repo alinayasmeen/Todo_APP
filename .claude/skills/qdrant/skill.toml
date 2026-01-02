@@ -1,0 +1,14 @@
+[skill]
+id = "qdrant"
+version = "1.0.0"
+name = "Qdrant"
+description = "Guides the use of Qdrant vector database for storing, searching, and retrieving vector embeddings for AI workflows."
+
+[function]
+name = "use_qdrant"
+description = "Provides guidance on using Qdrant vector database for storing, searching, and retrieving vector embeddings for AI workflows."
+parameters = { }
+
+[manifest]
+version = "v1"
+entrypoint = "skill.md"

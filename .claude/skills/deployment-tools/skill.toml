@@ -1,0 +1,14 @@
+[skill]
+id = "deployment-tools"
+version = "1.0.0"
+name = "Deployment Tools"
+description = "Guides the use of Docker, Kubernetes, and DigitalOcean for containerization, orchestration, and cloud deployment."
+
+[function]
+name = "use_deployment_tools"
+description = "Provides guidance on using Docker, Kubernetes, and DigitalOcean for containerization, orchestration, and cloud deployment."
+parameters = { }
+
+[manifest]
+version = "v1"
+entrypoint = "skill.md"

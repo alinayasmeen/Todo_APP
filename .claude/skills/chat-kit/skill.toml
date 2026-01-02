@@ -1,0 +1,14 @@
+[skill]
+id = "chat-kit"
+version = "1.0.0"
+name = "Chat Kit"
+description = "Guides the creation and integration of chat interfaces and components using Chat Kit for AI-driven conversations."
+
+[function]
+name = "use_chat_kit"
+description = "Provides guidance on creating and integrating chat interfaces using Chat Kit for AI-driven conversations."
+parameters = { }
+
+[manifest]
+version = "v1"
+entrypoint = "skill.md"

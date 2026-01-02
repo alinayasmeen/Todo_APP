@@ -1,0 +1,4 @@
+name = "rag_retrieval"
+description = "Builds and manages RAG pipelines, loaders, chunkers, embeddings, and Qdrant retrieval logic."
+version = "1.0.0"
+entrypoint = "skill.md"

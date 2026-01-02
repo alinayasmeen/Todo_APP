@@ -1,0 +1,14 @@
+[skill]
+id = "api-db-validation"
+version = "1.0.0"
+name = "API Validation & DB Consistency"
+description = "Guides testing and validating APIs and database consistency to ensure reliability and correctness of system data."
+
+[function]
+name = "use_api_db_validation"
+description = "Provides guidance on testing and validating APIs and database consistency to ensure reliability and correctness of system data."
+parameters = { }
+
+[manifest]
+version = "v1"
+entrypoint = "skill.md"

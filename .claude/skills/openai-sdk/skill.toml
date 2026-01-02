@@ -1,0 +1,14 @@
+[skill]
+id = "openai-sdk"
+version = "1.0.0"
+name = "OpenAI SDK"
+description = "Guides the use of OpenAI SDK for integrating AI capabilities into applications, including chat, text generation, and embeddings."
+
+[function]
+name = "use_openai_sdk"
+description = "Provides guidance on using OpenAI SDK for integrating AI capabilities into applications, including chat, text generation, and embeddings."
+parameters = { }
+
+[manifest]
+version = "v1"
+entrypoint = "skill.md"

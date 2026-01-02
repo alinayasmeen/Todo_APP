@@ -1,0 +1,4 @@
+name = "postgres_handler"
+description = "Generates SQL queries, schema designs, ORM models, and integrates PostgreSQL with FastAPI."
+version = "1.0.0"
+entrypoint = "skill.md"

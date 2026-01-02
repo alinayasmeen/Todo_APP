@@ -1,0 +1,4 @@
+name = "fastapi_builder"
+description = "Generates and edits FastAPI backend code, routes, models, auth, and project structures."
+version = "1.0.0"
+entrypoint = "skill.md"

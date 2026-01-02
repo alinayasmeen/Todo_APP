@@ -1,0 +1,4 @@
+name = "file_handler"
+description = "Creates, edits, and manages project files including code, markdown, JSON, and configuration files."
+version = "1.0.0"
+entrypoint = "skill.md"
