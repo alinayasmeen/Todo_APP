@@ -1,0 +1,17 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(source .venv/bin/activate)",
+      "Bash(uvicorn backend.main:app --reload --port 8000)",
+      "Bash(.specify/scripts/bash/check-prerequisites.sh --json --require-tasks --include-tasks)",
+      "Bash(.specify/scripts/bash/check-prerequisites.sh --json)",
+      "Bash(python -m pytest test_status_functionality.py -v)",
+      "Bash(pip install pytest)",
+      "Bash(pip install httpx)",
+      "Bash(python -m pytest test_api_structure.py -v)",
+      "Bash(pip install python-json-logger)",
+      "Bash(pip install bcrypt)",
+      "Bash(python -c \"from backend.main import app; print\\(''Application imported successfully''\\)\")"
+    ]
+  }
+}

@@ -1,1 +1,1 @@
-"""Backend package for Todo App API"""
+# Backend package initialization
