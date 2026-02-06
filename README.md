@@ -1,125 +1,291 @@
-# Todo Application - In-Memory Console App
+# Todo App with Authentication and RBAC
 
-A command-line todo application that stores tasks in memory, built as part of the Hackathon Phase I.
-
-## Project Overview
-
-This project implements a simple console-based todo application with the following features:
-- Add tasks with title and description
-- List all tasks with status indicators
-- Update task details
-- Delete tasks by ID
-- Mark tasks as complete/incomplete
-
-## Technology Stack
-
-- Python 3.13+
-- UV for package management
-- Claude Code for development
-
-## Prerequisites
-
-- Python 3.13 or higher
-- UV package manager
-
-## Setup Instructions
-
-1. **Clone the repository** (if applicable):
-   ```bash
-   git clone <repository-url>
-   cd todo-app
-   ```
-
-2. **Install UV** (if not already installed):
-   ```bash
-   pip install uv
-   ```
-
-3. **Install project dependencies**:
-   ```bash
-   uv sync
-   ```
-
-4. **Run the application**:
-   ```bash
-   uv run src/todo_app/__init__.py
-   ```
-
-   Or if you've installed the package:
-   ```bash
-   uv run todo-app
-   ```
-
-## Usage
-
-Once the application is running, you'll see a menu with the following options:
-
-1. **Add Task**: Create a new todo task with a title and optional description
-2. **List Tasks**: View all tasks with their completion status
-3. **Update Task**: Modify an existing task's title, description, or completion status
-4. **Delete Task**: Remove a task by its ID
-5. **Mark Task Complete**: Change a task's status to completed
-6. **Mark Task Incomplete**: Change a task's status to incomplete
-7. **Exit**: Quit the application
-
-## Project Structure
-
-```
-todo-app/
-├── src/                    # Source code files
-│   └── todo_app/          # Main application package
-│       └── __init__.py    # Main application code
-├── specs/history/         # Specification history files
-│   └── phase1_spec.md     # Phase I specification
-├── constitution.md        # Project constitution file
-├── pyproject.toml         # Project configuration and dependencies
-├── README.md             # This file
-└── CLAUDE.md             # Claude Code instructions
-```
+A full-stack web application that transforms a console-based todo application into a multi-user web application with secure authentication, role-based access control, and AI-ready architecture.
 
 ## Features
 
-### Add Task
-- Creates a new task with a unique ID
-- Requires a title (description is optional)
-- Task is stored in memory
+- **Multi-user support**: Each user has their own account and tasks
+- **Secure authentication**: JWT-based authentication with registration and login
+- **Role-based access control**: Different permissions for regular users and admins
+- **Task management**: Full CRUD operations for tasks with data isolation
+- **AI-ready architecture**: Extensible design for future AI integration
+- **Structured logging**: Comprehensive logging for observability
+- **Neon PostgreSQL**: Serverless PostgreSQL database with built-in backup/restore
 
-### List Tasks
-- Displays all tasks in a formatted table
-- Shows ID, status (✓ for complete, ○ for incomplete), title, and description
-- Truncates long titles and descriptions for better readability
+## Tech Stack
 
-### Update Task
-- Modifies existing task properties
-- Supports partial updates (only specified fields are changed)
-- Updates the task's modification timestamp
+- **Backend**: Python 3.12, FastAPI, SQLModel, JWT authentication
+- **Frontend**: Next.js 14, TypeScript, React
+- **Database**: Neon Serverless PostgreSQL
+- **Authentication**: Better Auth with JWT tokens
+- **Security**: Role-based access control, data isolation
+- **AI Integration**: Pluggable AI service interface
 
-### Delete Task
-- Removes a task by its ID
-- Validates that the task exists before deletion
+## Prerequisites
 
-### Mark Complete/Incomplete
-- Changes the completion status of a task
-- Provides separate options for marking complete or incomplete
+- Node.js 18+
+- Python 3.12+
+- PostgreSQL (or Neon Serverless PostgreSQL account)
+- Git
 
-## Development
+## Setup Instructions
 
-This project was developed using Claude Code following the agentic development workflow:
-1. Write specification
-2. Generate implementation plan
-3. Break implementation into tasks
-4. Implement via Claude Code
-5. Test and validate
-6. Document and review
+### 1. Clone and Navigate
 
-## Phase Requirements Met
+```bash
+git clone <repository-url>
+cd todo-app
+```
 
-✓ All 5 Basic Level features implemented (Add, Delete, Update, View, Mark Complete)
-✓ Spec-driven development with Claude Code and Spec-Kit Plus
-✓ Clean code principles and proper Python project structure
-✓ In-memory storage as required
-✓ Console-based user interface
+### 2. Backend Setup
 
-## License
+```bash
+# Navigate to backend
+cd backend
 
-[Specify license if applicable]
+# Create virtual environment
+python -m venv venv
+source venv/bin/activate  # On Windows: venv\Scripts\activate
+
+# Install dependencies
+pip install -r requirements.txt
+
+# Set environment variables
+cp ../.env.example .env
+# Edit .env with your database URL and authentication settings
+```
+
+### 3. Frontend Setup
+
+```bash
+# Navigate to frontend
+cd frontend
+
+# Install dependencies
+npm install
+# or
+yarn install
+
+# Set environment variables
+cp .env.local.example .env.local
+# Edit .env.local with your API and auth settings
+```
+
+### 4. Environment Configuration
+
+#### Backend (.env)
+
+```env
+DATABASE_URL=postgresql://username:password@localhost:5432/todo_app
+NEON_DATABASE_URL=postgresql://username:password@ep-xxx.us-east-1.aws.neon.tech/todo_app?sslmode=require
+SECRET_KEY=your-super-secret-jwt-key-here-make-it-long-and-random
+ALGORITHM=HS256
+ACCESS_TOKEN_EXPIRE_MINUTES=30
+```
+
+#### Frontend (.env.local)
+
+```env
+NEXT_PUBLIC_API_BASE_URL=http://localhost:8000
+NEXT_PUBLIC_BETTER_AUTH_URL=http://localhost:8000
+```
+
+## Running the Application
+
+### Backend
+
+```bash
+# Activate virtual environment
+source venv/bin/activate
+
+# Run the backend server
+uvicorn main:app --reload --port 8000
+```
+
+### Frontend
+
+```bash
+# From the frontend directory
+npm run dev
+# or
+yarn dev
+```
+
+## API Usage
+
+### Authentication Flow
+
+1. Register a new user: `POST /api/auth/register`
+2. Login to get JWT token: `POST /api/auth/login`
+3. Use token in headers for protected endpoints:
+
+   ```
+   Authorization: Bearer <jwt_token>
+   ```
+
+### Task Operations
+
+Once authenticated, you can perform these operations:
+
+**Get all tasks:**
+
+```bash
+curl -H "Authorization: Bearer <token>" \
+     http://localhost:8000/api/tasks
+```
+
+**Create a task:**
+
+```bash
+curl -X POST \
+     -H "Authorization: Bearer <token>" \
+     -H "Content-Type: application/json" \
+     -d '{"title": "Sample task", "description": "Sample description"}' \
+     http://localhost:8000/api/tasks
+```
+
+### Administrative Operations (Admin Role Only)
+
+Admin users have access to additional endpoints:
+
+**Get all tasks in the system:**
+
+```bash
+curl -H "Authorization: Bearer <admin-token>" \
+     http://localhost:8000/api/admin
+```
+
+**Get tasks for a specific user:**
+
+```bash
+curl -H "Authorization: Bearer <admin-token>" \
+     http://localhost:8000/api/admin/users/{user-id}/tasks
+```
+
+## Role-Based Access Control
+
+- **User Role**: Default role for registered users, can only access their own tasks
+- **Admin Role**: Special role with elevated privileges to access all tasks in the system
+- Role assignment is managed by system administrators
+
+## Database Migration
+
+To create database tables:
+
+```bash
+# From the backend directory
+python migrate.py create
+```
+
+Other migration commands:
+
+- `python migrate.py drop` - Drop all tables
+- `python migrate.py reset` - Reset the database
+
+## Development Commands
+
+### Backend
+
+```bash
+# Run tests
+pytest
+
+# Run with auto-reload
+uvicorn main:app --reload
+
+# Format code
+black .
+
+# Check types
+mypy .
+```
+
+### Frontend
+
+```bash
+# Development server
+npm run dev
+
+# Build for production
+npm run build
+
+# Run tests
+npm run test
+
+# Lint code
+npm run lint
+```
+
+## API Endpoints
+
+### Authentication Endpoints (`/api/auth`)
+
+- `POST /register` - Register a new user
+- `POST /login` - Authenticate user and return JWT token
+- `GET /profile` - Get current user's profile
+- `POST /refresh` - Refresh JWT token
+
+### Task Management Endpoints (`/api/tasks`)
+
+- `GET /` - Get all tasks for authenticated user
+- `POST /` - Create a new task for authenticated user
+- `GET /{task_id}` - Get a specific task
+- `PUT /{task_id}` - Update a specific task
+- `PATCH /{task_id}/complete` - Toggle task completion status
+- `DELETE /{task_id}` - Delete a specific task
+- `GET /ai/suggestions` - Get AI-generated task suggestions
+- `GET /ai/insights` - Get AI-generated productivity insights
+
+### Administrative Endpoints (`/api/admin`)
+
+- `GET /` - Get all tasks in the system
+- `GET /users/{user_id}/tasks` - Get tasks for a specific user
+- `PATCH /users/{user_id}/role` - Update user's role
+- `GET /users/{user_id}` - Get user information
+- `GET /stats` - Get system statistics
+
+## Security Features
+
+- JWT token validation on all protected endpoints
+- Data isolation - users can only access their own data
+- Password hashing with bcrypt
+- Rate limiting on authentication endpoints
+- Proper error handling without information leakage
+
+## AI Integration
+
+The application is designed with AI capabilities in mind:
+
+- AI service interface for easy integration of AI providers
+- AI-ready data models with metadata fields
+- AI endpoints for task suggestions and productivity insights
+- Pluggable architecture for swapping AI implementations
+
+## Troubleshooting
+
+### Common Issues
+
+- **Database Connection**: Ensure PostgreSQL is running and credentials are correct
+- **Authentication**: Verify JWT secret is the same in both backend and frontend
+- **CORS**: Check that frontend origin is allowed in backend CORS settings
+- **Environment Variables**: Ensure all required environment variables are set
+- **Role Access**: Verify user has appropriate role for accessing protected endpoints
+
+### Reset Database
+
+```bash
+# In backend directory
+python -c "from db import create_db_and_tables; create_db_and_tables()"
+```
+
+## Architecture Overview
+
+The application follows a layered architecture:
+
+- **Presentation Layer**: Next.js frontend with React components
+- **API Layer**: FastAPI backend with REST endpoints
+- **Service Layer**: Business logic and AI integration services
+- **Data Layer**: SQLModel ORM with Neon PostgreSQL database
+- **Security Layer**: JWT authentication and RBAC middleware
+
+This architecture ensures separation of concerns, scalability, and maintainability while preparing for future AI integration.

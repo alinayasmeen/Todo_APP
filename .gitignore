@@ -8,3 +8,20 @@ wheels/
 
 # Virtual environments
 .venv
+
+
+node_modules/
+dist/
+build/
+*.log
+.env
+*.env
+*.sqlite3
+*.db
+*.pyc
+__pycache__/
+.DS_Store
+.idea/
+venv/
+.next/
+

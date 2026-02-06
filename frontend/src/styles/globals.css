@@ -1,0 +1,151 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Custom styles */
+body {
+  @apply bg-pastel-lavender min-h-screen;
+}
+
+/* Additional custom styles for pastel theme */
+.btn-primary {
+  @apply bg-pastel-blue hover:bg-blue-300 text-white font-medium py-2 px-4 rounded-lg transition-all duration-200 shadow-md hover:shadow-lg;
+}
+
+.btn-secondary {
+  @apply bg-pastel-green hover:bg-green-300 text-white font-medium py-2 px-4 rounded-lg transition-all duration-200 shadow-md hover:shadow-lg;
+}
+
+.btn-danger {
+  @apply bg-pastel-pink hover:bg-pink-300 text-red-800 font-medium py-2 px-4 rounded-lg transition-all duration-200 shadow-md hover:shadow-lg;
+}
+
+.home-page {
+  @apply max-w-6xl mx-auto px-4 py-8;
+}
+
+.hero-section {
+  @apply text-center mb-12 mt-8 animate-fade-in;
+}
+
+.hero-section h1 {
+  @apply text-4xl md:text-5xl font-bold text-gray-800 mb-4;
+}
+
+.hero-section p {
+  @apply text-xl text-gray-600 max-w-2xl mx-auto;
+}
+
+.features {
+  @apply grid grid-cols-1 md:grid-cols-3 gap-8 mb-12;
+}
+
+.feature-card {
+  @apply bg-white bg-opacity-70 backdrop-blur-sm p-6 rounded-xl shadow-md border border-pastel-blue transition-transform duration-300 hover:scale-105;
+}
+
+.feature-card h2 {
+  @apply text-xl font-semibold text-gray-800 mb-2;
+}
+
+.feature-card p {
+  @apply text-gray-600;
+}
+
+.cta-section {
+  @apply text-center py-8;
+}
+
+.cta-section h2 {
+  @apply text-2xl font-bold text-gray-800 mb-6;
+}
+
+.auth-options {
+  @apply flex flex-col sm:flex-row justify-center gap-4;
+}
+
+.dashboard-container {
+  @apply max-w-6xl mx-auto px-4 py-8;
+}
+
+.dashboard-container > h1 {
+  @apply text-3xl font-bold text-gray-800 mb-8 text-center;
+}
+
+.task-form {
+  @apply bg-white bg-opacity-80 backdrop-blur-sm p-6 rounded-xl shadow-md mb-8 border border-pastel-green;
+}
+
+.task-form h2 {
+  @apply text-xl font-semibold text-gray-800 mb-4;
+}
+
+.form-group {
+  @apply mb-4;
+}
+
+.form-group input,
+.form-group textarea {
+  @apply w-full p-3 border border-pastel-gray rounded-lg focus:outline-none focus:ring-2 focus:ring-pastel-blue focus:border-transparent;
+}
+
+.task-list {
+  @apply bg-white bg-opacity-80 backdrop-blur-sm p-6 rounded-xl shadow-md border border-pastel-blue;
+}
+
+.task-list h2 {
+  @apply text-xl font-semibold text-gray-800 mb-4;
+}
+
+.task-item {
+  @apply flex flex-col sm:flex-row justify-between items-start p-4 border-b border-pastel-gray last:border-b-0 animate-slide-up;
+}
+
+.task-item.completed {
+  @apply bg-pastel-lavender bg-opacity-50;
+}
+
+.task-content h3 {
+  @apply text-lg font-medium text-gray-800;
+}
+
+.task-content p {
+  @apply text-gray-600 mt-1;
+}
+
+.task-meta {
+  @apply flex flex-wrap gap-2 mt-2;
+}
+
+.ai-category,
+.ai-priority {
+  @apply bg-pastel-yellow text-gray-800 text-xs px-2 py-1 rounded-full;
+}
+
+.task-actions {
+  @apply flex gap-2 mt-4 sm:mt-0;
+}
+
+.error-message {
+  @apply bg-pastel-pink text-red-800 p-3 rounded-lg mb-4;
+}
+
+/* Animation classes */
+.animate-fade-in {
+  animation: fadeIn 0.8s ease-in-out;
+}
+
+.animate-slide-up {
+  animation: slideUp 0.4s ease-out;
+}
+
+/* Responsive adjustments */
+@media (min-width: 640px) {
+  .auth-options {
+    @apply flex-row justify-center gap-6;
+  }
+
+  .task-item {
+    @apply items-center;
+  }
+}
