@@ -71,8 +71,8 @@ def setup_structured_logging(level: str = 'INFO') -> None:
     # Create console handler with structured formatter
     console_handler = logging.StreamHandler(sys.stdout)
     console_handler.setFormatter(StructuredFormatter(
-        '%(timestamp)s %(level)s %(service)s %(message)s %(module)s %(function)s %(line)d',
-        rename_fields={'message': 'msg'}
+        '%(asctime)s %(name)s %(levelname)s %(message)s',
+        rename_fields={'asctime': '@timestamp', 'name': 'service', 'levelname': 'level'}
     ))
 
     # Add handler to root logger

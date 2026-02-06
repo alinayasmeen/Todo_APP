@@ -48,15 +48,19 @@ def create_task(
 def read_tasks(
     status: Optional[str] = Query(None, description="Filter by status: all, pending, completed"),
     sort: Optional[str] = Query("created", description="Sort by: created, title"),
+    limit: Optional[int] = Query(None, ge=1, le=100, description="Limit number of results (1-100)"),
+    offset: Optional[int] = Query(0, ge=0, description="Offset for pagination"),
     current_user: User = Depends(get_current_active_user),
     session: Session = Depends(get_session)
 ):
     """
-    Retrieve all tasks for the authenticated user.
+    Retrieve all tasks for the authenticated user with filtering, sorting, and pagination.
 
     Args:
         status: Filter by status (all, pending, completed)
         sort: Sort by (created, title)
+        limit: Limit number of results (1-100)
+        offset: Offset for pagination
         current_user: The authenticated user requesting tasks
         session: Database session
 
@@ -78,6 +82,12 @@ def read_tasks(
         query = query.order_by(Task.title)
     else:  # Default to created date
         query = query.order_by(Task.created_at.desc())
+
+    # Apply pagination
+    if offset:
+        query = query.offset(offset)
+    if limit:
+        query = query.limit(limit)
 
     tasks = session.exec(query).all()
     return tasks
