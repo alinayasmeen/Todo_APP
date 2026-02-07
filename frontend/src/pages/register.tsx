@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { signIn } from '../lib/auth';
+import { useAuth } from '../context/auth';
 import { useRouter } from 'next/router';
 import Link from 'next/link';
 
@@ -7,6 +7,7 @@ const RegisterPage: React.FC = () => {
   const [formData, setFormData] = useState({ name: '', email: '', password: '' });
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
+  const { register } = useAuth();
   const router = useRouter();
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -15,37 +16,7 @@ const RegisterPage: React.FC = () => {
     setError('');
 
     try {
-      // For registration, we'll make a direct API call to the backend
-      const response = await fetch(process.env.NEXT_PUBLIC_API_BASE_URL || 'https://todo-app-lpxv.onrender.com/api' + '/auth/register', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          name: formData.name,
-          email: formData.email,
-          password: formData.password,
-        }),
-      });
-
-      if (response.ok) {
-        // Now try to sign in with the credentials
-        const loginResult = await signIn('credentials', {
-          email: formData.email,
-          password: formData.password,
-          redirect: false,
-        });
-
-        if (loginResult?.error) {
-          setError(loginResult.error);
-        } else {
-          // Redirect to dashboard
-          router.push('/dashboard');
-        }
-      } else {
-        const errorData = await response.json();
-        setError(errorData.detail || 'Registration failed');
-      }
+      await register(formData.name, formData.email, formData.password);
     } catch (err: any) {
       setError(err.message || 'Registration failed');
     } finally {

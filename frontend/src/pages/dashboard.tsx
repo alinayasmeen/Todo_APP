@@ -6,7 +6,7 @@
  */
 import React, { useState, useEffect } from 'react';
 import { tasksAPI } from '../lib/api';
-import { signOut } from '../lib/auth';
+import { useAuth } from '../context/auth';
 import { useRouter } from 'next/router';
 
 interface Task {
@@ -29,6 +29,7 @@ const Dashboard: React.FC = () => {
   const [newTask, setNewTask] = useState({ title: '', description: '' });
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
+  const { logout } = useAuth();
   const router = useRouter();
 
   // Load tasks when component mounts
@@ -93,7 +94,7 @@ const Dashboard: React.FC = () => {
   };
 
   const handleLogout = async () => {
-    await signOut();
+    await logout();
     router.push('/');
   };
 

@@ -1,14 +1,14 @@
 import React from 'react';
 import Link from 'next/link';
-import { useSession, signOut } from '../lib/auth';
+import { useAuth } from '../context/auth';
 import { useRouter } from 'next/router';
 
 const Navbar: React.FC = () => {
-  const { data: session } = useSession();
+  const { user, logout } = useAuth();
   const router = useRouter();
 
   const handleLogout = async () => {
-    await signOut();
+    await logout();
     router.push('/');
   };
 
@@ -20,9 +20,9 @@ const Navbar: React.FC = () => {
         </Link>
 
         <div className="flex items-center space-x-4">
-          {session?.user ? (
+          {user ? (
             <>
-              <span className="text-gray-700">Hello, {session.user.name || session.user.email}</span>
+              <span className="text-gray-700">Hello, {user.name || user.email}</span>
               <Link
                 href="/dashboard"
                 className={`px-4 py-2 rounded-lg transition-colors ${
