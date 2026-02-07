@@ -33,10 +33,12 @@ def create_task(
         TaskRead: The created task
     """
     # Create task with authenticated user's ID
-    db_task = Task.model_validate(task)
-    db_task.user_id = current_user.id
-    db_task.created_at = datetime.now()
-    db_task.updated_at = datetime.now()
+    db_task = Task(
+        **task.model_dump(),
+        user_id=current_user.id,
+        created_at=datetime.now(),
+        updated_at=datetime.now()
+    )
 
     session.add(db_task)
     session.commit()
@@ -47,7 +49,7 @@ def create_task(
 @router.get("/", response_model=List[TaskRead])
 def read_tasks(
     status: Optional[str] = Query(None, description="Filter by status: all, pending, completed"),
-    sort: Optional[str] = Query("created", description="Sort by: created, title"),
+    sort: Optional[str] = Query("created", description="Sort by: created, title, due_date"),
     limit: Optional[int] = Query(None, ge=1, le=100, description="Limit number of results (1-100)"),
     offset: Optional[int] = Query(0, ge=0, description="Offset for pagination"),
     current_user: User = Depends(get_current_active_user),
@@ -58,7 +60,7 @@ def read_tasks(
 
     Args:
         status: Filter by status (all, pending, completed)
-        sort: Sort by (created, title)
+        sort: Sort by (created, title, due_date)
         limit: Limit number of results (1-100)
         offset: Offset for pagination
         current_user: The authenticated user requesting tasks
@@ -80,6 +82,9 @@ def read_tasks(
     # Apply sorting
     if sort == "title":
         query = query.order_by(Task.title)
+    elif sort == "due_date":
+        # Sort by due_date, with null values last
+        query = query.order_by(Task.due_date.asc().nulls_last())
     else:  # Default to created date
         query = query.order_by(Task.created_at.desc())
 

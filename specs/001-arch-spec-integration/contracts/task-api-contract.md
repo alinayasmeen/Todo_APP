@@ -1,8 +1,8 @@
 # Task Management API Contract
 
 ## Base URL
-`https://api.todoapp.com/api` (production)
 `http://localhost:8000/api` (development)
+`https://todo-app-lpxv.onrender.com/api` (production)
 
 ## Authentication
 All endpoints require JWT token in Authorization header:

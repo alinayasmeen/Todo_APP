@@ -7,13 +7,13 @@ const nextConfig = {
     NEXT_PUBLIC_BETTER_AUTH_URL: process.env.NEXT_PUBLIC_BETTER_AUTH_URL,
   },
   images: {
-    domains: ['localhost', '127.0.0.1'],
+    domains: ['localhost', '127.0.0.1', 'todo-app-lpxv.onrender.com'],
   },
   async rewrites() {
     return [
       {
         source: '/api/:path*',
-        destination: `${process.env.NEXT_PUBLIC_API_BASE_URL || 'http://localhost:8000/api'}/:path*`,
+        destination: `${process.env.NEXT_PUBLIC_API_BASE_URL || 'https://todo-app-lpxv.onrender.com'}/:path*`,
       },
     ]
   },

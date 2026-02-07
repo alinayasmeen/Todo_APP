@@ -220,7 +220,7 @@ def create_user_task(
 import { authClient } from './auth';
 
 class ApiClient {
-  private baseUrl = process.env.NEXT_PUBLIC_API_BASE_URL || 'http://localhost:8000';
+  private baseUrl = process.env.NEXT_PUBLIC_API_BASE_URL || 'https://todo-app-lpxv.onrender.com';
 
   private async request(endpoint: string, options: RequestInit = {}) {
     // Get JWT token from Better Auth

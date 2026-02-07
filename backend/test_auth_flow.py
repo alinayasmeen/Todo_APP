@@ -6,7 +6,7 @@ import requests
 import json
 
 # Base URL for the API
-BASE_URL = "http://localhost:8000/api"
+BASE_URL = "https://todo-app-lpxv.onrender.com/api"
 
 def test_registration_flow():
     """Test registration with valid credentials succeeds"""

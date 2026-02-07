@@ -57,7 +57,7 @@ BETTER_AUTH_URL=http://localhost:4000
 
 #### Frontend (.env.local)
 ```env
-NEXT_PUBLIC_API_BASE_URL=http://localhost:8000/api
+NEXT_PUBLIC_API_BASE_URL=https://todo-app-lpxv.onrender.com/api
 NEXT_PUBLIC_BETTER_AUTH_URL=http://localhost:4000
 NEXT_PUBLIC_BETTER_AUTH_SECRET=your-super-secret-jwt-key-here-make-it-long-and-random
 ```
@@ -97,7 +97,7 @@ Once authenticated, you can perform these operations:
 **Get all tasks:**
 ```bash
 curl -H "Authorization: Bearer <token>" \
-     http://localhost:8000/api/users/me/tasks
+     https://todo-app-lpxv.onrender.com/api/users/me/tasks
 ```
 
 **Create a task:**
@@ -106,7 +106,7 @@ curl -X POST \
      -H "Authorization: Bearer <token>" \
      -H "Content-Type: application/json" \
      -d '{"title": "Sample task", "description": "Sample description"}' \
-     http://localhost:8000/api/users/me/tasks
+     https://todo-app-lpxv.onrender.com/api/users/me/tasks
 ```
 
 ### Administrative Operations (Admin Role Only)
@@ -115,13 +115,13 @@ Admin users have access to additional endpoints:
 **Get all tasks in the system:**
 ```bash
 curl -H "Authorization: Bearer <admin-token>" \
-     http://localhost:8000/api/admin/tasks
+     https://todo-app-lpxv.onrender.com/api/admin/tasks
 ```
 
 **Get tasks for a specific user:**
 ```bash
 curl -H "Authorization: Bearer <admin-token>" \
-     http://localhost:8000/api/admin/users/{user-id}/tasks
+     https://todo-app-lpxv.onrender.com/api/admin/users/{user-id}/tasks
 ```
 
 ## Role-Based Access Control

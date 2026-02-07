@@ -3,7 +3,7 @@
 ## Base URL
 
 - Development: http://localhost:8000
-- Production: https://api.example.com
+- Production: https://todo-app-lpxv.onrender.com
 
 ## Authentication
 

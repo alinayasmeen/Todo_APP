@@ -16,7 +16,7 @@ const RegisterPage: React.FC = () => {
 
     try {
       // For registration, we'll make a direct API call to the backend
-      const response = await fetch(process.env.NEXT_PUBLIC_API_BASE_URL || 'http://localhost:8000/api' + '/auth/register', {
+      const response = await fetch(process.env.NEXT_PUBLIC_API_BASE_URL || 'https://todo-app-lpxv.onrender.com/api' + '/auth/register', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
