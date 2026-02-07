@@ -4,7 +4,7 @@ Comprehensive tests for the Todo App API functionality.
 import pytest
 from fastapi.testclient import TestClient
 from backend.main import app
-from backend.db import engine
+from backend.db import get_engine
 from backend.models import User, Task
 from sqlmodel import Session, select
 
@@ -68,6 +68,7 @@ def test_admin_endpoints_exist():
 
 def test_database_connection():
     """Test that the database connection is working."""
+    engine = get_engine()
     with Session(engine) as session:
         # Try to query the User table (should exist)
         try:
