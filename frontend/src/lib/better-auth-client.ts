@@ -184,13 +184,16 @@ export const logoutUser = async () => {
     }
     
     // Optionally call the backend logout endpoint
-    await fetch(`${process.env.NEXT_PUBLIC_BETTER_AUTH_URL || 'https://todo-app-lpxv.onrender.com'}/api/auth/logout`, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        'Authorization': `Bearer ${await getAuthToken()}`,
-      },
-    });
+    const token = localStorage.getItem('authToken');
+    if (token) {
+      await fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL || 'https://todo-app-lpxv.onrender.com'}/api/auth/logout`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${token}`,
+        },
+      });
+    }
     
     return { success: true };
   } catch (error) {
