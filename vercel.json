@@ -1,4 +1,18 @@
 {
-  "framework": "nextjs",
-  "root": "frontend"
+  "version": 2,
+  "builds": [
+    {
+      "src": "frontend/**/*",
+      "use": "@vercel/next",
+      "config": {
+        "root": "frontend"
+      }
+    }
+  ],
+  "routes": [
+    {
+      "src": "/(.*)",
+      "dest": "frontend/$1"
+    }
+  ]
 }

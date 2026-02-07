@@ -3,7 +3,7 @@
  * Handles JWT token storage, validation, and expiration
  */
 
-import { jwtDecode } from 'jwt-decode';
+import jwtDecode from 'jwt-decode';
 
 // Constants for session management
 const TOKEN_KEY = 'todo_app_jwt_token';
