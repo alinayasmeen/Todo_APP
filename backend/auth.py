@@ -15,7 +15,7 @@ load_dotenv()
 security = HTTPBearer()
 
 # Get secret key from environment
-SECRET_KEY = os.getenv("BETTER_AUTH_SECRET", "your-super-secret-jwt-key-here-make-it-long-and-random")
+SECRET_KEY = os.getenv("BETTER_AUTH_SECRET", "Bf6TlD2ADzQSHaanabLDSKlmACPnkAl6")
 ALGORITHM = os.getenv("ALGORITHM", "HS256")
 ACCESS_TOKEN_EXPIRE_MINUTES = int(os.getenv("ACCESS_TOKEN_EXPIRE_MINUTES", "30"))
 
