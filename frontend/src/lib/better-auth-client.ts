@@ -11,7 +11,7 @@
 export const signIn = async (provider: string, credentials: any) => {
   if (provider === 'credentials' && credentials.email && credentials.password) {
     try {
-      const response = await fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL || 'https://todo-app-lpxv.onrender.com'}/api/auth/login`, {
+      const response = await fetch('/api/auth/login', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -42,7 +42,7 @@ export const signIn = async (provider: string, credentials: any) => {
 
 export const signUp = async (credentials: any) => {
   try {
-    const response = await fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL || 'https://todo-app-lpxv.onrender.com'}/api/auth/register`, {
+    const response = await fetch('/api/auth/register', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -186,7 +186,7 @@ export const logoutUser = async () => {
     // Optionally call the backend logout endpoint
     const token = localStorage.getItem('authToken');
     if (token) {
-      await fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL || 'https://todo-app-lpxv.onrender.com'}/api/auth/logout`, {
+      await fetch('/api/auth/logout', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
