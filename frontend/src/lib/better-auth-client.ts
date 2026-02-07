@@ -10,7 +10,39 @@
 // Mock Better Auth client functions to maintain interface compatibility
 export const signIn = async (provider: string, credentials: any) => {
   if (provider === 'credentials' && credentials.email && credentials.password) {
-    const response = await fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL || 'https://todo-app-lpxv.onrender.com'}/api/auth/login`, {
+    try {
+      const response = await fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL || 'https://todo-app-lpxv.onrender.com'}/api/auth/login`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          email: credentials.email,
+          password: credentials.password,
+        }),
+      });
+
+      if (response.ok) {
+        const data = await response.json();
+        // Store the JWT token in localStorage
+        if (typeof window !== 'undefined') {
+          localStorage.setItem('authToken', data.access_token || data.token);
+        }
+        return { success: true, user: data.user, token: data.access_token || data.token, error: null };
+      } else {
+        const errorData = await response.json();
+        return { success: false, user: null, token: null, error: errorData.detail || 'Login failed' };
+      }
+    } catch (error: any) {
+      return { success: false, user: null, token: null, error: error.message || 'Network error' };
+    }
+  }
+  return { success: false, user: null, token: null, error: 'Invalid credentials provided' };
+};
+
+export const signUp = async (credentials: any) => {
+  try {
+    const response = await fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL || 'https://todo-app-lpxv.onrender.com'}/api/auth/register`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -18,6 +50,7 @@ export const signIn = async (provider: string, credentials: any) => {
       body: JSON.stringify({
         email: credentials.email,
         password: credentials.password,
+        name: credentials.name,
       }),
     });
 
@@ -27,38 +60,13 @@ export const signIn = async (provider: string, credentials: any) => {
       if (typeof window !== 'undefined') {
         localStorage.setItem('authToken', data.access_token || data.token);
       }
-      return { success: true, user: data.user, token: data.access_token || data.token };
+      return { success: true, user: data.user, token: data.access_token || data.token, error: null };
     } else {
       const errorData = await response.json();
-      throw new Error(errorData.detail || 'Login failed');
+      return { success: false, user: null, token: null, error: errorData.detail || 'Registration failed' };
     }
-  }
-  throw new Error('Invalid credentials provided');
-};
-
-export const signUp = async (credentials: any) => {
-  const response = await fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL || 'https://todo-app-lpxv.onrender.com'}/api/auth/register`, {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-    },
-    body: JSON.stringify({
-      email: credentials.email,
-      password: credentials.password,
-      name: credentials.name,
-    }),
-  });
-
-  if (response.ok) {
-    const data = await response.json();
-    // Store the JWT token in localStorage
-    if (typeof window !== 'undefined') {
-      localStorage.setItem('authToken', data.access_token || data.token);
-    }
-    return { success: true, user: data.user, token: data.access_token || data.token };
-  } else {
-    const errorData = await response.json();
-    throw new Error(errorData.detail || 'Registration failed');
+  } catch (error: any) {
+    return { success: false, user: null, token: null, error: error.message || 'Network error' };
   }
 };
 

@@ -52,7 +52,7 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
     try {
       const result = await betterSignIn('credentials', { email, password });
       
-      if (!result.error) {
+      if (result.success) {
         // Get updated session info
         const session = getSession();
         setUser(session?.user || { email });
@@ -69,7 +69,7 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
     try {
       const result = await betterSignUp({ name, email, password });
       
-      if (!result.error) {
+      if (result.success) {
         // Get updated session info
         const session = getSession();
         setUser(session?.user || { email });

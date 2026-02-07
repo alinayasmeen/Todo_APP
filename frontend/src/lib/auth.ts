@@ -19,17 +19,12 @@ export const useSession = () => {
 
 // Wrapper for Better Auth signIn
 export const signIn = async (provider: string, credentials: any) => {
-  try {
-    if (provider === 'credentials') {
-      // Use the Better Auth client to sign in
-      const result = await betterSignIn(provider, credentials);
-      return { error: null, ...result };
-    }
-    return { error: 'Invalid provider' };
-  } catch (error: any) {
-    console.error('Sign in error:', error);
-    return { error: error.message || 'Login failed' };
+  if (provider === 'credentials') {
+    // Use the Better Auth client to sign in
+    const result = await betterSignIn(provider, credentials);
+    return result;
   }
+  return { error: 'Invalid provider', success: false, user: null, token: null };
 };
 
 // Wrapper for Better Auth signOut
