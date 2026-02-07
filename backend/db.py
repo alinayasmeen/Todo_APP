@@ -48,3 +48,18 @@ def set_sqlite_pragma(dbapi_connection, connection_record):
 def get_engine():
     """Get the database engine, creating it if it doesn't exist."""
     return create_db_and_tables()
+
+
+def get_engine_override():
+    """Get a test database engine for testing purposes."""
+    # Use an in-memory SQLite database for testing
+    test_engine = create_engine(
+        "sqlite:///./test.db",  # Using file-based SQLite for test persistence during test run
+        echo=False,  # Set to True for SQL query logging during testing
+        connect_args={"check_same_thread": False}  # Required for SQLite in multithreaded environments
+    )
+    
+    # Create all tables for the test database
+    SQLModel.metadata.create_all(test_engine)
+    
+    return test_engine
