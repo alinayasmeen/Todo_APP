@@ -19,6 +19,7 @@ class TaskBase(SQLModel):
     title: str = Field(min_length=1, max_length=200)
     description: Optional[str] = Field(default=None, max_length=1000)
     completed: bool = Field(default=False)
+    due_date: Optional[datetime] = Field(default=None)  # Optional due date for the task
 
 
 class Task(TaskBase, table=True):
@@ -42,6 +43,7 @@ class TaskUpdate(BaseModel):
     title: Optional[str] = None
     description: Optional[str] = None
     completed: Optional[bool] = None
+    due_date: Optional[datetime] = None  # Optional due date for the task
     # AI-ready metadata fields
     ai_category: Optional[str] = None
     ai_priority_score: Optional[float] = None
@@ -61,6 +63,7 @@ class TaskRead(TaskBase):
     ai_processing_metadata: Optional[str] = None
     created_at: datetime
     updated_at: datetime
+    due_date: Optional[datetime] = None  # Optional due date for the task
 
 
 class UserRead(SQLModel):

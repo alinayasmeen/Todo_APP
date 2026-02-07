@@ -31,23 +31,11 @@ def test_create_task_feature():
     print(f"Registration response status: {response.status_code}")
     
     if response.status_code == 200:
-        user_info = response.json()
+        registration_result = response.json()
+        token = registration_result["access_token"]
+        user_info = registration_result["user"]
         user_id = user_info["id"]
         print(f"✓ User registered successfully with ID: {user_id}")
-        
-        # Get the JWT token by logging in after registration
-        login_data = {
-            "email": unique_email,
-            "password": "securepassword123"
-        }
-        
-        login_response = client.post("/api/auth/login", json=login_data)
-        if login_response.status_code == 200:
-            login_result = login_response.json()
-            token = login_result["access_token"]
-        else:
-            print(f"✗ Failed to get token after registration. Login response: {login_response.json()}")
-            return
     else:
         # If user already exists, try to log in with the default test user
         print("User might already exist, trying to log in...")
@@ -68,20 +56,6 @@ def test_create_task_feature():
         else:
             print(f"✗ Failed to register or log in user. Status: {login_response.status_code}, Response: {login_response.json()}")
             return
-    
-    # Get the JWT token from login response
-    login_data = {
-        "email": "test@example.com",
-        "password": "securepassword123"
-    }
-    
-    login_response = client.post("/api/auth/login", json=login_data)
-    if login_response.status_code == 200:
-        login_result = login_response.json()
-        token = login_result["access_token"]
-    else:
-        print(f"✗ Failed to get token. Login response: {login_response.json()}")
-        return
     
     headers = {
         "Authorization": f"Bearer {token}",

@@ -16,6 +16,7 @@
 - title: string (not null)
 - description: text (nullable)
 - completed: boolean (default false)
+- due_date: timestamp (nullable)
 - created_at: timestamp
 - updated_at: timestamp
 
@@ -23,3 +24,4 @@
 
 - tasks.user_id (for filtering by user)
 - tasks.completed (for status filtering)
+- tasks.due_date (for sorting by due date)

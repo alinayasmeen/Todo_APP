@@ -274,7 +274,7 @@ interface TaskUpdateData {
 }
 
 class TodoApiClient {
-  private baseUrl = process.env.NEXT_PUBLIC_API_BASE_URL || 'http://localhost:8000/api';
+  private baseUrl = process.env.NEXT_PUBLIC_API_BASE_URL || 'https://todo-app-lpxv.onrender.com/api';
 
   private async request<T>(endpoint: string, options: RequestInit = {}): Promise<T> {
     // Get JWT token from Better Auth
@@ -354,7 +354,7 @@ BETTER_AUTH_TRUST_HOST=true
 
 ```bash
 # frontend/.env.local
-NEXT_PUBLIC_API_BASE_URL=http://localhost:8000/api
+NEXT_PUBLIC_API_BASE_URL=https://todo-app-lpxv.onrender.com/api
 NEXT_PUBLIC_BETTER_AUTH_URL=http://localhost:4000
 NEXT_PUBLIC_BETTER_AUTH_SECRET=your-super-secret-jwt-key-here-make-it-long-and-random
 ```

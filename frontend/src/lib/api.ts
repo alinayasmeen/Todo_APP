@@ -7,7 +7,7 @@
 import { getAuthToken } from './auth';
 
 // Base API URL from environment
-const API_BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL || 'http://localhost:8000/api';
+const API_BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL || 'https://todo-app-lpxv.onrender.com/api';
 
 // Generic function to make API requests
 const apiRequest = async (
