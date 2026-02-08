@@ -57,7 +57,7 @@ const AIChatbot: React.FC = () => {
 
     try {
       // Send the message to the AI endpoint
-      const response = await apiRequest('/ai/chat', {
+      const response = await apiRequest(`/ai/${user.id}/chat`, {
         method: 'POST',
         body: JSON.stringify({
           conversation_id: currentConversationId,

@@ -10,7 +10,7 @@ import { getAuthToken } from './auth';
 const API_BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL || '/api';
 
 // Generic function to make API requests
-const apiRequest = async (
+export const apiRequest = async (
   endpoint: string,
   options: RequestInit = {},
   includeAuth = true
@@ -30,7 +30,6 @@ const apiRequest = async (
   // Add authentication header if required
   if (includeAuth) {
     const token = await getAuthToken();
-    console.log('API request - Token available:', !!token);
     if (token) {
       requestOptions.headers = {
         ...requestOptions.headers,
