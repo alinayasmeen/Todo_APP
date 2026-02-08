@@ -15,6 +15,15 @@ const apiRequest = async (
   options: RequestInit = {},
   includeAuth = true
 ): Promise<any> => {
+  // Prepare the request options
+  const requestOptions: RequestInit = {
+    ...options,
+    headers: {
+      'Content-Type': 'application/json',
+      ...options.headers,
+    },
+  };
+
   // Construct the full URL
   const url = `${API_BASE_URL}${endpoint}`;
 
