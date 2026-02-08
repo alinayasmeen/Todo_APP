@@ -35,6 +35,35 @@ class Task(TaskBase, table=True):
     updated_at: datetime = Field(default_factory=datetime.now)
 
 
+class Conversation(SQLModel, table=True):
+    """Model for storing conversation state."""
+    id: Optional[int] = Field(default=None, primary_key=True)
+    user_id: str = Field(foreign_key="user.id")  # References User.id
+    created_at: datetime = Field(default_factory=datetime.now)
+    updated_at: datetime = Field(default_factory=datetime.now)
+
+
+class Message(SQLModel, table=True):
+    """Model for storing individual messages in a conversation."""
+    id: Optional[int] = Field(default=None, primary_key=True)
+    conversation_id: int = Field(foreign_key="conversation.id")  # References Conversation.id
+    role: str = Field(max_length=20)  # 'user' or 'assistant'
+    content: str = Field(max_length=5000)  # The message content
+    created_at: datetime = Field(default_factory=datetime.now)
+    # Metadata for tracking tool calls and responses
+    message_metadata: Optional[str] = Field(default=None, max_length=2000)  # JSON string for additional metadata
+
+
+class TaskAction(SQLModel, table=True):
+    """Model for tracking AI actions performed on tasks."""
+    id: Optional[int] = Field(default=None, primary_key=True)
+    conversation_id: int = Field(foreign_key="conversation.id")  # References Conversation.id
+    action_type: str = Field(max_length=50)  # Type of action (create, update, delete, complete)
+    task_details: Optional[str] = Field(default=None, max_length=2000)  # JSON string with task details
+    result: Optional[str] = Field(default=None, max_length=2000)  # Result of the action
+    created_at: datetime = Field(default_factory=datetime.now)
+
+
 class TaskCreate(TaskBase):
     pass
 
@@ -64,6 +93,22 @@ class TaskRead(TaskBase):
     created_at: datetime
     updated_at: datetime
     due_date: Optional[datetime] = None  # Optional due date for the task
+
+
+class ConversationRead(SQLModel):
+    id: int
+    user_id: str
+    created_at: datetime
+    updated_at: datetime
+
+
+class MessageRead(SQLModel):
+    id: int
+    conversation_id: int
+    role: str
+    content: str
+    created_at: datetime
+    message_metadata: Optional[str] = None
 
 
 class UserRead(SQLModel):

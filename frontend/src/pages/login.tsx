@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { signIn } from '../lib/auth';
+import { useAuth } from '../context/auth';
 import { useRouter } from 'next/router';
 import Link from 'next/link';
 
@@ -7,6 +7,7 @@ const LoginPage: React.FC = () => {
   const [formData, setFormData] = useState({ email: '', password: '' });
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
+  const { login } = useAuth();
   const router = useRouter();
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -15,19 +16,7 @@ const LoginPage: React.FC = () => {
     setError('');
 
     try {
-      // Use Better Auth's signIn function
-      const result = await signIn('credentials', {
-        email: formData.email,
-        password: formData.password,
-        redirect: false,
-      });
-
-      if (result?.error) {
-        setError(result.error);
-      } else {
-        // Redirect to dashboard
-        router.push('/dashboard');
-      }
+      await login(formData.email, formData.password);
     } catch (err: any) {
       setError(err.message || 'Login failed');
     } finally {

@@ -6,7 +6,7 @@
  */
 import React, { useState, useEffect } from 'react';
 import { tasksAPI } from '../lib/api';
-import { signOut } from '../lib/auth';
+import { useAuth } from '../context/auth';
 import { useRouter } from 'next/router';
 
 interface Task {
@@ -29,6 +29,7 @@ const Dashboard: React.FC = () => {
   const [newTask, setNewTask] = useState({ title: '', description: '' });
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
+  const { logout } = useAuth();
   const router = useRouter();
 
   // Load tasks when component mounts
@@ -93,7 +94,7 @@ const Dashboard: React.FC = () => {
   };
 
   const handleLogout = async () => {
-    await signOut();
+    await logout();
     router.push('/');
   };
 
@@ -128,20 +129,24 @@ const Dashboard: React.FC = () => {
         <form onSubmit={handleCreateTask} className="bg-white bg-opacity-80 backdrop-blur-sm p-6 rounded-xl shadow-md mb-8 border border-pastel-green animate-slide-up">
           <h2 className="text-xl font-semibold text-gray-800 mb-4">Create New Task</h2>
           <div className="mb-4">
+            <label htmlFor="task-title" className="block text-sm font-medium text-gray-700 mb-1">Task Title *</label>
             <input
+              id="task-title"
               type="text"
               value={newTask.title}
               onChange={(e) => setNewTask({...newTask, title: e.target.value})}
-              placeholder="Task title"
+              placeholder="Enter task title"
               required
               className="w-full p-3 border border-pastel-gray rounded-lg focus:outline-none focus:ring-2 focus:ring-pastel-blue focus:border-transparent"
             />
           </div>
           <div className="mb-4">
+            <label htmlFor="task-description" className="block text-sm font-medium text-gray-700 mb-1">Task Description</label>
             <textarea
+              id="task-description"
               value={newTask.description}
               onChange={(e) => setNewTask({...newTask, description: e.target.value})}
-              placeholder="Task description (optional)"
+              placeholder="Enter task description (optional)"
               rows={3}
               className="w-full p-3 border border-pastel-gray rounded-lg focus:outline-none focus:ring-2 focus:ring-pastel-blue focus:border-transparent"
             />

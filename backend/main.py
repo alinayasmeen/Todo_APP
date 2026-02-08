@@ -41,7 +41,9 @@ def health_check():
 from .routes import tasks
 from .routes import auth
 from .routes import admin
+from .routes import ai_chat
 
 app.include_router(tasks.router, prefix="/api/tasks", tags=["tasks"])
 app.include_router(auth.router, prefix="/api/auth", tags=["auth"])
 app.include_router(admin.router, prefix="/api/admin", tags=["admin"])
+app.include_router(ai_chat.router, prefix="/api", tags=["ai"])

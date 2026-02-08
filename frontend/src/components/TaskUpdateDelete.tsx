@@ -182,12 +182,14 @@ const TaskUpdateDelete: React.FC<TaskUpdateDeleteProps> = ({ task, onTaskUpdated
     <div className="flex items-center justify-between p-3 border border-gray-200 rounded-md bg-white shadow-sm hover:shadow-md transition-shadow">
       <div className="flex items-center">
         <input
-          type="checkbox"
-          checked={completed}
-          onChange={handleToggleComplete}
-          className="h-5 w-5 text-indigo-600 rounded focus:ring-indigo-500"
-          disabled={loading}
-        />
+  type="checkbox"
+  checked={completed}
+  onChange={handleToggleComplete}
+  aria-label={completed ? "Mark task as incomplete" : "Mark task as complete"}
+  className="h-5 w-5 text-indigo-600 rounded focus:ring-indigo-500"
+  disabled={loading}
+/>
+
         <div className="ml-3 min-w-0">
           <h3 className={`text-sm font-medium ${completed ? 'line-through text-gray-500' : 'text-gray-900'}`}>
             {title}

@@ -177,6 +177,7 @@ const TaskList: React.FC<TaskListProps> = ({ onTaskUpdated }) => {
                   checked={task.completed}
                   onChange={() => toggleTaskCompletion(task.id)}
                   className="h-5 w-5 text-indigo-600 rounded mt-1 focus:ring-indigo-500"
+                  aria-label={`Mark task "${task.title}" as ${task.completed ? 'incomplete' : 'complete'}`}
                 />
                 <div className="ml-3 flex-1 min-w-0">
                   <div className="flex items-center justify-between">

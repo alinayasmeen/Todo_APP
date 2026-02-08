@@ -6,18 +6,15 @@
  */
 import { getAuthToken } from './auth';
 
-// Base API URL from environment
-const API_BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL || 'https://todo-app-lpxv.onrender.com/api';
+// Base API URL - use relative paths to ensure Next.js rewrites work properly
+const API_BASE_URL = '/api'; // Always use relative path to go through Next.js rewrites
 
 // Generic function to make API requests
-const apiRequest = async (
+export const apiRequest = async (
   endpoint: string,
   options: RequestInit = {},
   includeAuth = true
 ): Promise<any> => {
-  // Construct the full URL
-  const url = `${API_BASE_URL}${endpoint}`;
-
   // Prepare the request options
   const requestOptions: RequestInit = {
     ...options,
@@ -26,6 +23,9 @@ const apiRequest = async (
       ...options.headers,
     },
   };
+
+  // Construct the full URL
+  const url = `${API_BASE_URL}${endpoint}`;
 
   // Add authentication header if required
   if (includeAuth) {
@@ -36,6 +36,7 @@ const apiRequest = async (
         'Authorization': `Bearer ${token}`,
       };
     } else {
+      console.error('Authentication required but no token available');
       throw new Error('Authentication required but no token available');
     }
   }
@@ -72,7 +73,7 @@ export const authAPI = {
   // Register a new user
   register: async (userData: { email: string; password: string; name?: string }) => {
     // Remove auth requirement for registration
-    const response = await fetch(`${API_BASE_URL}/auth/register`, {
+    const response = await fetch('/api/auth/register', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -97,7 +98,7 @@ export const authAPI = {
   // Login a user
   login: async (credentials: { email: string; password: string }) => {
     // Remove auth requirement for login
-    const response = await fetch(`${API_BASE_URL}/auth/login`, {
+    const response = await fetch('/api/auth/login', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -228,5 +229,5 @@ export const adminAPI = {
 
 // Health check
 export const healthAPI = {
-  check: () => fetch(`${API_BASE_URL}/`).then(res => res.json()),
+  check: () => fetch('/').then(res => res.json()),
 };

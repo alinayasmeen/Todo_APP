@@ -7,3 +7,4 @@ better-auth>=0.0.1b11
 PyJWT>=2.8.0
 python-json-logger>=2.0.7
 bcrypt>=4.0.1
+openai>=1.0.0
