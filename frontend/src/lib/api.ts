@@ -6,8 +6,8 @@
  */
 import { getAuthToken } from './auth';
 
-// Base API URL from environment - when using rewrites, use relative paths
-const API_BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL || '/api';
+// Base API URL - use relative paths to ensure Next.js rewrites work properly
+const API_BASE_URL = '/api'; // Always use relative path to go through Next.js rewrites
 
 // Generic function to make API requests
 export const apiRequest = async (
