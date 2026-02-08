@@ -79,7 +79,7 @@ export const signOut = async () => {
   // Optionally call the backend logout endpoint
   const token = localStorage.getItem('authToken');
   if (token) {
-    await fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL || 'https://todo-app-lpxv.onrender.com'}/api/auth/logout`, {
+    await fetch('/api/auth/logout', {  // Use relative path to go through Next.js rewrites
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -192,6 +192,8 @@ export const logoutUser = async () => {
           'Content-Type': 'application/json',
           'Authorization': `Bearer ${token}`,
         },
+      }).catch(() => {
+        // Ignore logout errors - still clear local state
       });
     }
     

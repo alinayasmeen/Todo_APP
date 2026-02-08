@@ -42,7 +42,9 @@ export const getAuthToken = async (): Promise<string | null> => {
   try {
     // Get the token from localStorage
     if (typeof window !== 'undefined') {
-      return localStorage.getItem('authToken') || null;
+      const token = localStorage.getItem('authToken');
+      console.log('Retrieved token from localStorage:', token ? 'YES' : 'NO');
+      return token || null;
     }
     return null;
   } catch (error) {

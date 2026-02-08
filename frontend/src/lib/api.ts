@@ -18,24 +18,17 @@ const apiRequest = async (
   // Construct the full URL
   const url = `${API_BASE_URL}${endpoint}`;
 
-  // Prepare the request options
-  const requestOptions: RequestInit = {
-    ...options,
-    headers: {
-      'Content-Type': 'application/json',
-      ...options.headers,
-    },
-  };
-
   // Add authentication header if required
   if (includeAuth) {
     const token = await getAuthToken();
+    console.log('API request - Token available:', !!token);
     if (token) {
       requestOptions.headers = {
         ...requestOptions.headers,
         'Authorization': `Bearer ${token}`,
       };
     } else {
+      console.error('Authentication required but no token available');
       throw new Error('Authentication required but no token available');
     }
   }
