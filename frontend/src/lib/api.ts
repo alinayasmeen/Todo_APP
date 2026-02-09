@@ -31,18 +31,24 @@ export const apiRequest = async (
   if (includeAuth) {
     const token = await getAuthToken();
     if (token) {
+      console.log('Using token for request:', endpoint); // Debug log
       requestOptions.headers = {
         ...requestOptions.headers,
         'Authorization': `Bearer ${token}`,
       };
     } else {
-      console.error('Authentication required but no token available');
+      console.error('Authentication required but no token available for endpoint:', endpoint);
       throw new Error('Authentication required but no token available');
     }
   }
 
+  console.log('Making API request to:', url); // Debug log
+  console.log('Headers:', requestOptions.headers); // Debug log
+
   // Make the API request
   const response = await fetch(url, requestOptions);
+
+  console.log('Response status:', response.status, 'for endpoint:', endpoint); // Debug log
 
   // Handle different response statuses
   if (!response.ok) {
@@ -52,9 +58,11 @@ export const apiRequest = async (
     try {
       const errorData = await response.json();
       errorMessage = errorData.detail || errorMessage;
+      console.log('API error response:', errorData); // Debug log
     } catch (e) {
       // If response is not JSON, use status text
       errorMessage = response.statusText || errorMessage;
+      console.log('Non-JSON API error:', response.statusText); // Debug log
     }
 
     throw new Error(errorMessage);

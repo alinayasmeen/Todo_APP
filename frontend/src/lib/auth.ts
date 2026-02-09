@@ -44,6 +44,36 @@ export const getAuthToken = async (): Promise<string | null> => {
     if (typeof window !== 'undefined') {
       const token = localStorage.getItem('authToken');
       console.log('Retrieved token from localStorage:', token ? 'YES' : 'NO');
+      
+      // Validate the token format before returning
+      if (token) {
+        const tokenParts = token.split('.');
+        if (tokenParts.length !== 3) {
+          console.error('Invalid JWT token format');
+          localStorage.removeItem('authToken'); // Remove invalid token
+          return null;
+        }
+        
+        // Try to decode the payload to ensure it's valid
+        try {
+          const base64Payload = tokenParts[1].replace(/-/g, '+').replace(/_/g, '/');
+          const paddedBase64 = base64Payload.padEnd(base64Payload.length + (4 - base64Payload.length % 4) % 4, '=');
+          const payload = JSON.parse(atob(paddedBase64));
+          
+          // Check if token is expired
+          const currentTime = Math.floor(Date.now() / 1000);
+          if (payload.exp && payload.exp < currentTime) {
+            console.warn('Token has expired, removing from storage');
+            localStorage.removeItem('authToken');
+            return null;
+          }
+        } catch (decodeError) {
+          console.error('Invalid JWT token payload:', decodeError);
+          localStorage.removeItem('authToken'); // Remove invalid token
+          return null;
+        }
+      }
+      
       return token || null;
     }
     return null;
