@@ -6,8 +6,8 @@
 import { jwtDecode } from 'jwt-decode';
 
 // Constants for session management
-const TOKEN_KEY = 'todo_app_jwt_token';
-const REFRESH_TOKEN_KEY = 'todo_app_refresh_token';
+const TOKEN_KEY = 'authToken';
+const REFRESH_TOKEN_KEY = 'refresh_authToken';
 const SESSION_TIMEOUT_MS = 30 * 60 * 1000; // 30 minutes (configurable)
 
 /**
@@ -21,7 +21,26 @@ export const storeToken = (token: string): void => {
  * Retrieves the stored JWT token
  */
 export const getToken = (): string | null => {
-  return localStorage.getItem(TOKEN_KEY);
+  const token = localStorage.getItem(TOKEN_KEY);
+  
+  // Validate token format before returning
+  if (token) {
+    const tokenParts = token.split('.');
+    if (tokenParts.length !== 3) {
+      console.error('Invalid JWT token format detected, removing from storage');
+      localStorage.removeItem(TOKEN_KEY); // Remove invalid token
+      return null;
+    }
+    
+    // Check if token is expired
+    if (isTokenExpired(token)) {
+      console.warn('Stored token is expired, removing from storage');
+      localStorage.removeItem(TOKEN_KEY);
+      return null;
+    }
+  }
+  
+  return token;
 };
 
 /**
@@ -57,12 +76,26 @@ export const removeRefreshToken = (): void => {
  */
 export const isTokenExpired = (token: string): boolean => {
   try {
+    // Use jwtDecode which handles base64url encoding properly
     const decoded = jwtDecode<{ exp: number }>(token);
     const currentTime = Date.now() / 1000;
     return decoded.exp < currentTime;
   } catch (error) {
     console.error('Error decoding JWT token:', error);
     return true; // If we can't decode, assume it's invalid/expired
+  }
+};
+
+/**
+ * Gets the token expiration time
+ */
+export const getTokenExpiration = (token: string): number | null => {
+  try {
+    const decoded = jwtDecode<{ exp: number }>(token);
+    return decoded.exp ? decoded.exp * 1000 : null; // Convert to milliseconds
+  } catch (error) {
+    console.error('Error decoding JWT token for expiration:', error);
+    return null;
   }
 };
 
@@ -74,8 +107,23 @@ export const isValidSession = (): boolean => {
   if (!token) {
     return false;
   }
+  
+  // Check if token has proper JWT format (3 parts separated by dots)
+  const tokenParts = token.split('.');
+  if (tokenParts.length !== 3) {
+    console.error('Invalid JWT token format');
+    removeToken(); // Remove invalid token
+    return false;
+  }
 
-  return !isTokenExpired(token);
+  // Check if token is expired
+  if (isTokenExpired(token)) {
+    console.warn('Token is expired, removing from storage');
+    removeToken();
+    return false;
+  }
+
+  return true;
 };
 
 /**

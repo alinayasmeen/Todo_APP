@@ -1,0 +1,105 @@
+# Optimized values for production deployment
+
+# Frontend configuration
+frontend:
+  replicaCount: 2
+  image:
+    repository: todo-frontend
+    pullPolicy: IfNotPresent
+    tag: "latest"
+  service:
+    type: ClusterIP
+    port: 3000
+  ingress:
+    enabled: true
+    className: "nginx"
+    annotations:
+      kubernetes.io/ingress.class: nginx
+      cert-manager.io/cluster-issuer: letsencrypt-prod
+      nginx.ingress.kubernetes.io/ssl-redirect: "true"
+    hosts:
+      - host: todo-app.example.com
+        paths:
+          - path: /
+            pathType: Prefix
+    tls:
+      - secretName: todo-app-tls
+        hosts:
+          - todo-app.example.com
+  resources:
+    limits:
+      cpu: 200m
+      memory: 256Mi
+    requests:
+      cpu: 100m
+      memory: 128Mi
+  autoscaling:
+    enabled: true
+    minReplicas: 2
+    maxReplicas: 5
+    targetCPUUtilizationPercentage: 70
+    targetMemoryUtilizationPercentage: 70
+
+# Backend configuration
+backend:
+  replicaCount: 2
+  image:
+    repository: todo-backend
+    pullPolicy: IfNotPresent
+    tag: "latest"
+  service:
+    type: ClusterIP
+    port: 8000
+  resources:
+    limits:
+      cpu: 300m
+      memory: 512Mi
+    requests:
+      cpu: 150m
+      memory: 256Mi
+  autoscaling:
+    enabled: true
+    minReplicas: 2
+    maxReplicas: 5
+    targetCPUUtilizationPercentage: 70
+    targetMemoryUtilizationPercentage: 70
+
+# Database configuration
+database:
+  enabled: true
+  postgresql:
+    auth:
+      postgresPassword: "securePostgresPassword123!"
+      database: "todoapp"
+    service:
+      port: 5432
+    persistence:
+      enabled: true
+      size: 10Gi
+      storageClass: "fast-ssd"
+    resources:
+      limits:
+        cpu: 500m
+        memory: 1Gi
+      requests:
+        cpu: 250m
+        memory: 512Mi
+
+# Environment variables
+env:
+  NEXT_PUBLIC_API_BASE_URL: "http://todo-backend-service:8000"
+  DATABASE_URL: "postgresql://postgres:securePostgresPassword123!@todo-app-postgres:5432/todoapp"
+
+# Pod annotations for monitoring
+podAnnotations:
+  prometheus.io/scrape: "true"
+  prometheus.io/port: "80"
+  
+# Node selector to schedule on specific nodes (optional)
+nodeSelector: {}
+
+# Tolerations for node taints (optional)
+tolerations: []
+
+# Affinity rules (optional)
+affinity: {}

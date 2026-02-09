@@ -1,0 +1,21 @@
+{{- if and .Values.database.enabled .Values.database.postgresql.persistence.enabled }}
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: {{ include "todo-app.fullname" . }}-postgres-pvc
+  labels:
+    {{- include "todo-app.labels" . | nindent 4 }}
+spec:
+  accessModes:
+    - {{ .Values.database.postgresql.persistence.accessMode | default "ReadWriteOnce" }}
+  resources:
+    requests:
+      storage: {{ .Values.database.postgresql.persistence.size }}
+  {{- if .Values.database.postgresql.persistence.storageClass }}
+  {{- if (eq "-" .Values.database.postgresql.persistence.storageClass) }}
+  storageClassName: ""
+  {{- else }}
+  storageClassName: {{ .Values.database.postgresql.persistence.storageClass }}
+  {{- end }}
+  {{- end }}
+{{- end }}

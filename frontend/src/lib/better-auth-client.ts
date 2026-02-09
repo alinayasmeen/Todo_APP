@@ -75,7 +75,7 @@ export const signOut = async () => {
   if (typeof window !== 'undefined') {
     localStorage.removeItem('authToken');
   }
-  
+
   // Optionally call the backend logout endpoint
   const token = localStorage.getItem('authToken');
   if (token) {
@@ -89,6 +89,16 @@ export const signOut = async () => {
       // Ignore logout errors - still clear local state
     });
   }
+  
+  // Also clear any other auth-related storage
+  if (typeof window !== 'undefined') {
+    // Clear any other potential auth storage
+    Object.keys(localStorage).forEach(key => {
+      if (key.includes('auth') || key.includes('token')) {
+        localStorage.removeItem(key);
+      }
+    });
+  }
 };
 
 // Create a separate function to get session
@@ -96,11 +106,23 @@ export const getSession = () => {
   // Get user info from the stored JWT token
   const token = localStorage.getItem('authToken');
   if (!token) return null;
-  
+
   try {
     // Decode the JWT token to get user info
+    // JWT tokens use base64url encoding, so we need to convert back to base64
     const base64Payload = token.split('.')[1];
-    const payload = JSON.parse(atob(base64Payload));
+    if (!base64Payload) {
+      console.error('Invalid token format: missing payload');
+      return null;
+    }
+    
+    // Convert base64url to base64
+    const base64 = base64Payload.replace(/-/g, '+').replace(/_/g, '/');
+    
+    // Add padding if needed
+    const paddedBase64 = base64.padEnd(base64.length + (4 - base64.length % 4) % 4, '=');
+    
+    const payload = JSON.parse(atob(paddedBase64));
     return {
       user: {
         id: payload.sub,
@@ -118,8 +140,8 @@ export const getSession = () => {
 // Enhanced authentication functions that work with our API
 export const authenticateUser = async (email: string, password: string) => {
   try {
-    // Attempt to sign in using Better Auth
-    const response = await fetch(`${process.env.NEXT_PUBLIC_BETTER_AUTH_URL || 'https://todo-app-lpxv.onrender.com'}/api/auth/login`, {
+    // Attempt to sign in using Better Auth - use relative path to go through Next.js rewrites
+    const response = await fetch('/api/auth/login', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -129,12 +151,12 @@ export const authenticateUser = async (email: string, password: string) => {
 
     if (response.ok) {
       const data = await response.json();
-      
+
       // Store the token in localStorage for API requests
       if (typeof window !== 'undefined') {
         localStorage.setItem('authToken', data.access_token || data.token);
       }
-      
+
       return { success: true, user: data.user, token: data.access_token || data.token };
     } else {
       const errorData = await response.json();
@@ -148,8 +170,8 @@ export const authenticateUser = async (email: string, password: string) => {
 
 export const registerUser = async (name: string, email: string, password: string) => {
   try {
-    // Attempt to register using Better Auth
-    const response = await fetch(`${process.env.NEXT_PUBLIC_BETTER_AUTH_URL || 'https://todo-app-lpxv.onrender.com'}/api/auth/register`, {
+    // Attempt to register using Better Auth - use relative path to go through Next.js rewrites
+    const response = await fetch('/api/auth/register', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -159,12 +181,12 @@ export const registerUser = async (name: string, email: string, password: string
 
     if (response.ok) {
       const data = await response.json();
-      
+
       // Store the token in localStorage for API requests
       if (typeof window !== 'undefined') {
         localStorage.setItem('authToken', data.access_token || data.token);
       }
-      
+
       return { success: true, user: data.user, token: data.access_token || data.token };
     } else {
       const errorData = await response.json();
@@ -182,7 +204,7 @@ export const logoutUser = async () => {
     if (typeof window !== 'undefined') {
       localStorage.removeItem('authToken');
     }
-    
+
     // Optionally call the backend logout endpoint
     const token = localStorage.getItem('authToken');
     if (token) {
@@ -197,6 +219,16 @@ export const logoutUser = async () => {
       });
     }
     
+    // Also clear any other auth-related storage
+    if (typeof window !== 'undefined') {
+      // Clear any other potential auth storage
+      Object.keys(localStorage).forEach(key => {
+        if (key.includes('auth') || key.includes('token')) {
+          localStorage.removeItem(key);
+        }
+      });
+    }
+
     return { success: true };
   } catch (error) {
     console.error('Logout error:', error);

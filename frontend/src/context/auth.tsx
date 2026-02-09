@@ -36,9 +36,17 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
       // In a real app, you'd validate the token with an API call
       // For now, we'll just set a dummy user based on the token
       try {
-        // Decode the token to get user info (simplified)
-        const base64Payload = token.split('.')[1];
-        const payload = JSON.parse(atob(base64Payload));
+        // Decode the token to get user info (properly handling base64url encoding)
+        const tokenParts = token.split('.');
+        if (tokenParts.length !== 3) {
+          throw new Error('Invalid token format');
+        }
+        
+        // Convert base64url to base64
+        const base64Payload = tokenParts[1].replace(/-/g, '+').replace(/_/g, '/');
+        // Add padding if needed
+        const paddedBase64 = base64Payload.padEnd(base64Payload.length + (4 - base64Payload.length % 4) % 4, '=');
+        const payload = JSON.parse(atob(paddedBase64));
         setUser({ id: payload.sub, email: payload.email });
       } catch (error) {
         console.error('Error decoding token:', error);
